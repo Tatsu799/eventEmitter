@@ -1,5 +1,5 @@
 export class EventEmitter {
-  private event: { [eventName: string]: Array<(...args: any[]) => void> } = {};
+  private event: { [eventName: string]: ((...args: any[]) => void)[] } = {};
 
   /*イベント追加*/
   addEvent(eventName: string, listener: (...args: any[]) => void): void {
@@ -11,10 +11,13 @@ export class EventEmitter {
 
   /*イベントの削除*/
   removeEvent(eventName: string, listener: (...args: any[]) => void): void {
-    if (!this.event[eventName]) return;
+    const listeners = this.event[eventName];
+    if (!listeners) return;
     //削除したいイベント以外の要素の配列を作成
     this.event[eventName] = this.event[eventName].filter((event) => event !== listener);
-    if (this.event[eventName].length < 1) {
+
+    //イベントがなくなったら削除
+    if (this.event[eventName].length === 0) {
       delete this.event[eventName];
     }
   }
@@ -25,16 +28,20 @@ export class EventEmitter {
   }
 
   /*イベント発火*/
-  emitEvent(eventName: string, ...args: any[]) {
-    if (!this.event[eventName]) return;
-    this.event[eventName].forEach((event) => event(...args));
+  emitEvent(eventName: string, ...args: any[]): void {
+    const listeners = this.event[eventName];
+    if (listeners) {
+      this.event[eventName].forEach((event) => event(...args));
+    }
   }
 
   /*一度だけイベント発火*/
   emitEventOnce(eventName: string, ...args: any[]) {
-    if (!this.event[eventName]) return;
+    const listeners = this.event[eventName];
 
-    this.event[eventName].forEach((event) => event(...args));
-    delete this.event[eventName];
+    if (listeners) {
+      this.event[eventName].forEach((event) => event(...args));
+      delete this.event[eventName];
+    }
   }
 }

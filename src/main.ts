@@ -7,11 +7,12 @@ class EventTest {
     this.eventEmitter = new EventEmitter();
 
     this.setEvents();
+    // this.eventEmitter.emitEventOnce('newEvent1');
     this.eventEmitter.emitEvent('newEvent1');
     this.eventEmitter.emitEvent('newEvent2');
 
     // this.eventEmitter.removeEvent('newEvent1', this.newEvent1);
-    this.eventEmitter.removeAllEvens();
+    // this.eventEmitter.removeAllEvens();
     console.log(this.eventEmitter);
   }
 
