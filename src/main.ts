@@ -1,15 +1,23 @@
 import { EventEmitter } from './event-emitter';
 
+interface Events {
+  [key: string]: any[];
+  // newEvent1: [];
+  // newEvent2: [];
+}
+
 class EventTest {
-  private eventEmitter: EventEmitter;
+  private eventEmitter: EventEmitter<Events>;
 
   constructor() {
-    this.eventEmitter = new EventEmitter();
+    this.eventEmitter = new EventEmitter<Events>();
 
     this.setEvents();
-    // this.eventEmitter.emitEventOnce('newEvent1');
-    this.eventEmitter.emitEvent('newEvent1');
-    this.eventEmitter.emitEvent('newEvent2');
+    this.eventEmitter.emitEvent('newEventOnce');
+    // this.eventEmitter.emitEvent('newEvent1');
+    // this.eventEmitter.emitEvent('newEvent2');
+    this.eventEmitter.emitEvent('newEventOnce');
+    // this.eventEmitter.emitEvent('newEvent1');
 
     // this.eventEmitter.removeEvent('newEvent1', this.newEvent1);
     // this.eventEmitter.removeAllEvens();
@@ -17,6 +25,7 @@ class EventTest {
   }
 
   private setEvents() {
+    this.eventEmitter.addEvent('newEventOnce', this.newEvent1, true);
     this.eventEmitter.addEvent('newEvent1', this.newEvent1);
     this.eventEmitter.addEvent('newEvent2', this.newEvent2);
   }
